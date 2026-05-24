@@ -1,0 +1,47 @@
+# === Large Local LLM Files (Do not commit model weights!) ===
+qwen2.5-7b.gguf
+*.gguf
+*.bin
+*.pt
+*.safetensors
+
+# === Python Virtual Environments ===
+.venv/
+vllm_env/
+venv/
+env/
+ENV/
+
+# === Python Compilation & Bytecode Caches ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# === Node / React Frontend Dependencies & Builds ===
+src/web_app/frontend/node_modules/
+src/web_app/frontend/dist/
+src/web_app/frontend/build/
+.eslintcache
+
+# === EHR Telemetry Data & Chroma Vector DBs ===
+data/processed/*.db
+data/vector_db/
+.chroma/
+
+# === Local Configurations & Secrets ===
+.env
+.env.local
+.env.*.local
+.vscode/
+.idea/
+*.log
+
+# === OS & System Files ===
+.DS_Store
+Thumbs.db
+desktop.ini

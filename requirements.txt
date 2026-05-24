@@ -1,0 +1,32 @@
+# DiaTrace.AI — Core Backend Dependencies
+# Extracted from the verified active local virtual environment (.venv)
+
+# FastAPI Backend & Web Server
+fastapi==0.136.1
+uvicorn==0.47.0
+python-multipart==0.0.29
+watchfiles==1.2.0
+
+# Multi-Agent Coordination Framework
+crewai==1.14.5
+crewai-cli==1.14.5
+crewai-core==1.14.5
+
+# Vector Database & RAG Guidelines Stores
+chromadb==1.1.1
+hnswlib==0.8.0
+
+# Database Telemetry & Parsing Handlers
+aiosqlite==0.21.0
+pdfplumber==0.11.9
+pydantic==2.12.5
+pydantic-settings==2.10.1
+
+# Computational Utilities & Libraries
+numpy==2.4.6
+requests==2.34.2
+python-dotenv==1.2.2
+colorama==0.4.6
+
+# RAG Evaluation Suite & Testing
+pytest==9.0.3

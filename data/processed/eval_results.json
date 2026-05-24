@@ -1,0 +1,32 @@
+[
+  {
+    "patient_nbr": 1152,
+    "scores": {
+      "error": "Failed to connect to Ollama"
+    }
+  },
+  {
+    "patient_nbr": 1314,
+    "scores": {
+      "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)"
+    }
+  },
+  {
+    "patient_nbr": 5220,
+    "scores": {
+      "error": "Expecting value: line 1 column 1 (char 0)"
+    }
+  },
+  {
+    "patient_nbr": 11394,
+    "scores": {
+      "error": "Expecting value: line 1 column 1 (char 0)"
+    }
+  },
+  {
+    "patient_nbr": 11511,
+    "scores": {
+      "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)"
+    }
+  }
+]
