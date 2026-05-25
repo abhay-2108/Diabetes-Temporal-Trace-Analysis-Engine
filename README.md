@@ -85,3 +85,18 @@ DiaTrace.AI/
 All detailed instructions for setting up the local sandboxes, extracting local GGUF models, running vLLM inside WSL2, starting the FastAPI and React servers, and triggering E2E integration tests are documented in the operational guide:
 
 👉 **[Go to RUNNING.md (Operational Guide)](file:///p:/AIML%20Projects/Diabetes%20Temporal%20Trace%20&%20Analysis%20Engine/RUNNING.md)**
+
+---
+
+## 5. Quick Start (Docker)
+
+You can run the entire DiaTrace.AI platform seamlessly using Docker! The official image is hosted on Docker Hub. 
+
+To run the application locally on port 8080 without needing to compile the source code or install dependencies:
+
+```bash
+# Run the pre-built image from Docker Hub
+docker run -p 8080:8080 abhay120/diatrace-app:latest
+```
+
+Once the container boots, access the web interface at **http://localhost:8080**.

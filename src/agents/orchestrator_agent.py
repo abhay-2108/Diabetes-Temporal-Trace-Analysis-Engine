@@ -348,31 +348,35 @@ class PatientOrchestrator:
             mock = MockClinicalLLM(self.state, self.vdb)
             return mock, mock
 
+        # Dynamic LLM Routing via Env Vars (for Docker networking)
+        vllm_url = os.getenv("VLLM_URL", "http://localhost:8000/v1")
+        ollama_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
+
         # 1. Try vLLM (Multi-LoRA enabled OpenAI-compatible endpoint)
         # Checking the model tags endpoint for status
-        vllm_active = self.is_service_running("http://localhost:8000/v1/models")
+        vllm_active = self.is_service_running(f"{vllm_url}/models")
         
         if vllm_active:
-            print("[vLLM] Server active on port 8000. Configuring Multi-LoRA routing...")
+            print(f"[vLLM] Server active at {vllm_url}. Configuring Multi-LoRA routing...")
             # Agent 1: Temporal Miner uses the fine-tuned LoRA adapter
             fine_tuned_llm = LLM(
                 model="diatrace-lora", 
-                base_url="http://localhost:8000/v1",
+                base_url=vllm_url,
                 temperature=0.0
             )
             # Agents 2, 3, 4: Use the shared base model
             reasoning_llm = LLM(
                 model="qwen2.5:7b", 
-                base_url="http://localhost:8000/v1",
+                base_url=vllm_url,
                 temperature=0.2
             )
             return fine_tuned_llm, reasoning_llm
 
         # 2. Fall back to Ollama (Legacy local mode)
-        ollama_active = self.is_service_running("http://localhost:11434/api/tags")
+        ollama_active = self.is_service_running(f"{ollama_url}/api/tags")
         if ollama_active:
-            print("[Ollama] Local service detected. Using a single model (qwen2.5:7b) for ALL agents...")
-            shared_llm = LLM(model="ollama/qwen2.5:7b", base_url="http://localhost:11434")
+            print(f"[Ollama] Local service detected at {ollama_url}. Using a single model (qwen2.5:7b) for ALL agents...")
+            shared_llm = LLM(model="ollama/qwen2.5:7b", base_url=ollama_url)
             return shared_llm, shared_llm
             
         # 3. Fall back to Cloud APIs

@@ -11,6 +11,8 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 # Ensure project root is importable
@@ -256,7 +258,22 @@ def analyze_custom_note(req: AnalyzeCustomRequest):
     )
 
 
+# ── Static Frontend Serving ──────────────────────────────────────────
+FRONTEND_DIST = os.path.join(ROOT_DIR, "src", "web_app", "frontend", "dist")
+
+if os.path.exists(FRONTEND_DIST):
+    app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIST, "assets")), name="assets")
+
+    @app.get("/{full_path:path}")
+    def serve_frontend(full_path: str):
+        # Serve specific files if they exist (e.g. favicon.svg)
+        file_path = os.path.join(FRONTEND_DIST, full_path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        # Fallback to index.html for client-side routing
+        return FileResponse(os.path.join(FRONTEND_DIST, "index.html"))
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("src.web_app.api:app", host="127.0.0.1", port=8000, reload=True)
-
+    # Use port 8080 when running as standalone app with frontend
+    uvicorn.run("src.web_app.api:app", host="0.0.0.0", port=8080, reload=True)

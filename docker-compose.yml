@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  diatrace-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: diatrace-app:latest
+    container_name: diatrace-app
+    ports:
+      - "8080:8080"
+    environment:
+      - USE_MOCK_LLM=false
+      - VLLM_URL=http://vllm-server:8000/v1
+      - OLLAMA_URL=http://host.docker.internal:11434
+      # Add OpenAI/Gemini keys here if you need cloud fallbacks
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    volumes:
+      # Mount SQLite and Vector DB to persist data across container restarts
+      - ./data/processed:/app/data/processed
+      - ./data/vector_db:/app/data/vector_db
+    depends_on:
+      - vllm-server
+    restart: unless-stopped
+
+  vllm-server:
+    image: vllm/vllm-openai:latest
+    container_name: vllm-server
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount huggingface cache so weights aren't re-downloaded every time
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      # Use HF_TOKEN if downloading private/gated models (optional)
+      - HF_TOKEN=${HF_TOKEN:-}
+    command: >
+      --model Qwen/Qwen2.5-7B-Instruct-AWQ
+      --enable-lora
+      --lora-modules diatrace-lora=raj0120/diatrace-qwen2.5-lora
+      --max-lora-rank 64
+      --max-model-len 4096
+      --enforce-eager
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+    # If the host is Windows/WSL2 and doesn't have NVIDIA toolkit installed globally, 
+    # this service may fail. In that case, the app will gracefully fall back to Mock LLM
+    # or host.docker.internal:11434 (Ollama)
