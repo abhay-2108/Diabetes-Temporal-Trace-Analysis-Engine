@@ -1,5 +1,7 @@
 # DiaTrace.AI: Type 2 Diabetes Mellitus (T2DM) Care & Complication Predictor
 
+> **Disclaimer:** *DiaTrace.AI is an experimental AI research project. It is NOT a certified medical device and is NOT intended for clinical use, diagnosis, or treatment. Always consult a qualified healthcare professional.*
+
 DiaTrace.AI is a clinical intelligence engine designed to solve the problem of **Clinical Inertia** and fragmented Electronic Health Records (EHR). By leveraging a fine-tuned Medical LLM and a multi-agent system coordinated via the CrewAI framework, DiaTrace.AI ingests years of unstructured physician progress notes and structured laboratory telemetry to map patient trajectories, flag hidden microvascular complications, and recommend guideline-aligned therapeutic adjustments.
 
 ---
